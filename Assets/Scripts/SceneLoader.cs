@@ -1,0 +1,23 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class SceneLoader : MonoBehaviour
+{
+    private int currentSceneIndex;
+
+
+    public void LoadNextScene()
+    {
+        currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(currentSceneIndex + 1);
+        Debug.Log("Ready to upload Scene " + currentSceneIndex+1);
+    }
+
+    public int GetCurrentSceneIndex()
+    {
+        currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        return currentSceneIndex;
+    }
+}
