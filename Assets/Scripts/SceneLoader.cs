@@ -20,4 +20,18 @@ public class SceneLoader : MonoBehaviour
         currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         return currentSceneIndex;
     }
+
+    public void LoadLobbyScene()
+    {
+        SceneManager.LoadScene(1);
+    }
+
+    public void LoadWinScene()
+    {
+        SceneManager.LoadScene(3);
+    }
+    public void LoadLoseScene()
+    {
+        SceneManager.LoadScene(4);
+    }
 }

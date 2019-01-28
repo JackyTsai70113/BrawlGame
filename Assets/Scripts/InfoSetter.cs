@@ -1,41 +1,37 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class InfoSetter : MonoBehaviour {
 
-    [Header("Body Setting")]
-    public GameObject body;
+    [Header("ComponentS Setting")]
+    public TextMeshPro ID;
+    public TextMeshPro HpText;
+    public Slider hpSlider;
 
     private float yPos = 25;
 
-    [SerializeField] TextMeshPro HpText;
-    Character character;
-    Transform[] transforms;
-    // Use this for initialization
-    void Start () {
-        transform.position =
-            body.GetComponent<Rigidbody>().transform.position +
-            new Vector3(0, yPos, 0);
-        transform.rotation = 
-            Quaternion.LookRotation(transform.position - Camera.main.transform.position);
-        HpText = GetComponentInChildren<TextMeshPro>();
-    }
-	
-	// Update is called once per frame
-	void Update ()
+    public void SetInfoTransform (Vector3 bodyPos)
     {
         transform.position =
-            body.GetComponent<Rigidbody>().transform.position +
-            new Vector3(0, yPos, 0);
+            bodyPos + new Vector3(0, yPos, 0);
+        Vector3 lookDirection = transform.position -
+           Camera.main.transform.position;
+        lookDirection.x = 0;
+        transform.rotation =
+           Quaternion.LookRotation(lookDirection);
+
     }
-    public void SetHpText(int hp)
+    public void SetHp(int hp, int maxHp)
     {
         HpText.text = hp.ToString();
+        hpSlider.value = (float)hp/maxHp;
     }
-    public void SetHpBar()
-    {
 
+    public void SetID(string ID)
+    {
+        this.ID.text = ID;
     }
 }

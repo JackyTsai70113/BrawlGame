@@ -6,20 +6,23 @@ using UnityEngine;
 public class CameraControllerSelf : MonoBehaviour {
 
     Vector3 PlayerToCameraPos;
-    PlayerBody player;
+    PlayerBody playerBody;
 
     private bool faceToPlayer;
     private float zDistance;
-    private float posY = 230f;
-    private float posZ = -180;
+    private float posY = 1126f;
+    private float posZ = -810;
     private float rotX = 53.322f;
     // Use this for initialization
     void Start () {
-        player = FindObjectOfType<PlayerBody>();
+        playerBody = FindObjectOfType<PlayerBody>();
         //transform.position = Vector3.zero;
         //StartCoroutine(printSth());
+        if (playerBody != null)
+        {
+            PlayerToCameraPos = transform.position - new Vector3(0, 0, -130);
+        }
         transform.rotation = Quaternion.Euler(rotX, 0, 0);
-        PlayerToCameraPos = new Vector3(0, posY, posZ);
         
 
 
@@ -32,19 +35,22 @@ public class CameraControllerSelf : MonoBehaviour {
 	}
     void Move()
     {
-        /*
-        transform.rotation = Quaternion.Euler(xAngle, 0, 0);
-        
-        transform.position = player.transform.position +
-            new Vector3(0, 0, -zDistance);
-        */
-        //transform.position = player.transform.position +
-        //    PlayerToCameraPos;
-        Vector3 targetPos = player.transform.position +
+        if (playerBody != null)
+        {
+            Vector3 targetPos = playerBody.transform.position +
             PlayerToCameraPos;
-        targetPos = new Vector3(0, targetPos.y, targetPos.z);
-        if (targetPos.z <= (-310f)) targetPos.z = -310f;
-        if (targetPos.z >= 310f) targetPos.z = 310f;
-        transform.position = targetPos;
+            if (playerBody.transform.position.z > 120)
+            {
+                targetPos = new Vector3(0, 0, 120) + PlayerToCameraPos;
+            }
+            else if (playerBody.transform.position.z < -120)
+            {
+                targetPos = new Vector3(0, 0, -120) + PlayerToCameraPos;
+            }
+
+            targetPos = new Vector3(0, targetPos.y, targetPos.z);
+            transform.position = targetPos;
+        }
+
     }
 }

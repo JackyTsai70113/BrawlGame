@@ -6,7 +6,7 @@ public class DamageDealer: MonoBehaviour {
 
     public int damage;
 
-    public void setDamage(int damage)
+    public void SetDamage(int damage)
     {
         this.damage = damage;
         //Debug.Log("set damage:" + damage);

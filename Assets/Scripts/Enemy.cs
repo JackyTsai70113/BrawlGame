@@ -12,14 +12,16 @@ public class Enemy : Character
     public int unitLength = 10;
 
     [Header("Target Setting")]
-    public string targetObjectName = "";
+    public string targetObjectTag = "";
     public float strollDistance;
     public float shootingDistance;
     private GameObject target;
     private float distanceFromTarget;
     private LayerMask barrierLayerMask;
+    private LayerMask barrierLayer;
     private LayerMask playerLayerMask;
-    private LayerMask layerMask;
+    private LayerMask playerLayer;
+    private LayerMask playerBulletLayer;
 
     [Header("Bullet Setting")]
     [SerializeField] GameObject bulletPrefab;
@@ -29,15 +31,15 @@ public class Enemy : Character
     [Header("Shooting Setting")]
     private bool shooting;
     public float shootSpeed = 10;
-    public float shootDuration = 0.5f;
     private Vector3 shootVelocity;
+
 
     //Components
     private Rigidbody rb;
 
     //AutoCounters
     private int moveCounter = 0;
-    private int shotCounter = 0;
+    private int shootCounter = 0;
 
     void Start()
     {
@@ -45,39 +47,57 @@ public class Enemy : Character
         rb = GetComponent<Rigidbody>();
 
         InitialHpAndComponents();
-        SetCharacterNumber(1);
-        SetTarget();
+        if (gameObject.tag == "Team0")
+            targetObjectTag = "Team1";
+        else if (gameObject.tag == "Team1")
+            targetObjectTag = "Team0";
 
-        //shooting LayerMask
-        barrierLayerMask = (1 << 12);
-        playerLayerMask = (1 << 8);
-        layerMask = barrierLayerMask + playerLayerMask;
+
+        //shooting Layer
+        barrierLayerMask = 1 << 12;
+        playerLayerMask = 1 << 8;
+        barrierLayer = 12;
+        playerLayer = 8;
+        playerBulletLayer = 13;
+
     }
 
     void FixedUpdate()
     {
-        distanceFromTarget =
-            Vector3.Distance(transform.position, target.transform.position);
+        SetTarget();
+
         Move();
         Shoot();
     }
+
+    void Update()
+    {
+        info.GetComponent<InfoSetter>().
+            SetInfoTransform(transform.position);
+    }
+
     private void SetTarget()
     {
-        foreach (GameObject targetObject in GameObject.FindGameObjectsWithTag("Human"))
+        if (target != null)
+            return;
+
+        foreach (GameObject targetObject in 
+            GameObject.FindGameObjectsWithTag(targetObjectTag))
             if (targetObject != gameObject)
             {
                 target = targetObject;
                 break;
             }
-        if (target == null)
-            return;
+        distanceFromTarget =
+            Vector3.Distance(transform.position, target.transform.position);
     }
 
     public void Move()
     {
+
         if (!moving)
             return;
-        if (moveCounter != 20)
+        if (moveCounter != 50)
         {
             moveCounter += 1;
             return;
@@ -91,9 +111,10 @@ public class Enemy : Character
             target.transform.position.x - transform.position.x,
             0, target.transform.position.z - transform.position.z));
         if (BarrierExistFront()) {
-            deltaX = moveUnitVector.z;
+            deltaX = - moveUnitVector.z;
             deltaZ = moveUnitVector.x;
-            rb.velocity = Vector3.Normalize(new Vector3(deltaX, 0, deltaZ)) * unitLength;
+            rb.velocity = Vector3.Normalize(new Vector3(deltaX, 0, deltaZ)) * 
+                moveSpeed;
         }
         else {
             if ( distanceFromTarget > strollDistance)
@@ -106,7 +127,7 @@ public class Enemy : Character
             {
                 deltaX = Random.Range(-1.0f, 1.0f);
                 deltaZ = Random.Range(-1.0f, 1.0f);
-                rb.velocity = Vector3.Normalize(new Vector3(deltaX, 0, deltaZ)) * moveSpeed;
+                rb.velocity = Vector3.Normalize(new Vector3(deltaX, 0, deltaZ)) * moveSpeed/2;
             }
         }
         //rotation
@@ -126,23 +147,23 @@ public class Enemy : Character
                         newRotation,
                         rotationSpeed * Time.deltaTime);
         }
-        //Debug.Log(GetComponent<Rigidbody>().velocity);
     }
 
     public void Shoot()
-    {
+    { 
         if (!isShooting)
             return;
         if (!AbilityToShootPlayer() || 
             (distanceFromTarget > shootingDistance))
             return;
-        if (shotCounter != 30)
+        if (shootCounter != 100)
         {
-            shotCounter += 1;
+            shootCounter += 1;
             return;
         }
-        shotCounter = 0;
-        
+
+        shootCounter = 0;
+
         Vector3 bulletStartPos = transform.position +
             transform.up * bulletYPos +
             transform.forward * bulletDistance;
@@ -169,10 +190,11 @@ public class Enemy : Character
     private bool BarrierExistFront()
     {
         Ray ray = new Ray(transform.position + new Vector3(0, bulletYPos, 0),
-          unitLength * Vector3.Normalize(target.transform.position - transform.position));
+          unitLength * Vector3.Normalize(
+            target.transform.position - transform.position));
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, unitLength, barrierLayerMask))
-            return (hit.collider.gameObject.layer == 12);
+            return (hit.collider.gameObject.layer == barrierLayer);
         return false;
     }
 
@@ -181,16 +203,15 @@ public class Enemy : Character
         Ray ray = new Ray(transform.position + new Vector3(0, bulletYPos, 0),
           target.transform.position - transform.position);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
-        {
-            return (hit.collider.gameObject.layer == 8);
-        }
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity,
+                barrierLayerMask + playerLayerMask))
+            return (hit.collider.gameObject.layer == playerLayer);
         return false;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == 13)
+        if (other.gameObject.layer == playerBulletLayer)
         {
             DamageDealer damageDealer = other.gameObject.GetComponent<DamageDealer>();
             //Debug.Log("character" + GetCharacterNumber() + "is shot by " +

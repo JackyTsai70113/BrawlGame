@@ -13,7 +13,9 @@ public class Shooter : MonoBehaviour {
     [Header("Shooting Setting")]
     public int damage;
     public float shootSpeed = 10;
-    public float shootDuration = 0.5f;
+    public float shootDuration = 2f;
+
+    public AudioClip audioClip;
 
 
     private Coroutine shootingCoroutine;
@@ -37,7 +39,6 @@ public class Shooter : MonoBehaviour {
         }
         else if (!Input.GetButton("Fire1"))
         {
-            //Debug.Log(shootingCoroutine);
             if (shootingCoroutine != null)
                 StopCoroutine(shootingCoroutine);
         }
@@ -66,6 +67,8 @@ public class Shooter : MonoBehaviour {
 
             //Player need some infomation to rotate.
             GetComponent<PlayerBody>().Shooting(shootVelocity);
+            AudioSource.PlayClipAtPoint(
+                audioClip, Camera.main.transform.position, 0.2f);
             yield return new WaitForSeconds(shootDuration);
         }
     }

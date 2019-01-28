@@ -5,19 +5,31 @@ using UnityEngine;
 
 public class PlayerBody: Character
 {
+    public bool invulnerable;
     [Header("Movement Setting")]
     public bool speedUp;
     public float moveSpeed;
     public float rotationSpeed = 15;
     public float rotateToBulletDuration = 1f;
 
-    //Shooting Variables
-    private bool shooting = false;
-    private Vector3 bulletDirection;
+    public bool respawning;
 
-    //Components
+    //Shooting Variables
+    private bool ifRotateToBullet = false;
+    private Vector3 bulletDirection;
     private Rigidbody rb;
-   
+
+    public AudioClip healingAudio;
+    Coroutine HealSelfCoroutine;
+    private bool abilityToHeal = true;
+    public float durationToWaitForHealSelf = 3f;
+    public int hpToHealSelf;
+
+    LayerMask enemyBulletLayer = 14;
+
+
+
+
     void Start()
     {
         InitialHpAndComponents();
@@ -26,34 +38,42 @@ public class PlayerBody: Character
     }
     void FixedUpdate()
     {
-        Move();
-        if (isShooting)
+        MoveAndRotate();
+    }
+    private void Update()
+    {
+        info.GetComponent<InfoSetter>().
+            SetInfoTransform(transform.position);
+        if (hp < maxHp && HealSelfCoroutine == null)
         {
-
+            ResetHealSelfCoroutine();   
         }
+
     }
 
-    public void Move()
+    private void MoveAndRotate()
     {
         float deltaX = Input.GetAxis("Horizontal");
         float deltaZ = Input.GetAxis("Vertical");
-        Vector3 moveVelocity = 
-            new Vector3(deltaX, 0, deltaZ);
+        Vector3 deltaMovement = new Vector3(deltaX, 0, deltaZ);
         if (speedUp)
-            moveVelocity *= 3;
-        rb.MovePosition(transform.position + 
-            Vector3.Normalize(moveVelocity) * moveSpeed * Time.deltaTime);
+            rb.MovePosition(transform.position +
+                Vector3.Normalize(deltaMovement) * moveSpeed * 3 * Time.deltaTime);
+        else
+            rb.MovePosition(transform.position +
+                Vector3.Normalize(deltaMovement) * moveSpeed * Time.deltaTime);
+
         //rotation
-        if (shooting)
+        if (ifRotateToBullet)
         {
             var newRotation = Quaternion.LookRotation(bulletDirection);
             transform.rotation = Quaternion.Slerp(
                         transform.rotation,
                         newRotation,
                         rotationSpeed * Time.deltaTime);
-            
+
         }
-        else if (deltaX != 0 || deltaZ != 0)
+        else if (Mathf.Abs(deltaX) > 0.001 || Mathf.Abs(deltaZ) > 0.001)
         {
             var newRotation = Quaternion.Euler(0,
                 Mathf.Atan2(deltaX, deltaZ) * 180 / Mathf.PI, 0);
@@ -66,32 +86,66 @@ public class PlayerBody: Character
         {
             rb.freezeRotation = true;
             rb.velocity = Vector3.zero;
+            transform.position -= new Vector3(0, transform.position.y, 0);
         }
+
     }
-    
+
     public void Shooting(Vector3 shootVelocity)
     {
         bulletDirection = shootVelocity;
-        if (shooting == false)
+        if (ifRotateToBullet == false)
             StartCoroutine(SetShootingCoroutine());
+        if(hp < maxHp)
+            ResetHealSelfCoroutine();
+    }
+
+    private void ResetHealSelfCoroutine()
+    {
+        if (HealSelfCoroutine != null)
+        {
+            StopCoroutine(HealSelfCoroutine);
+        }
+        HealSelfCoroutine = StartCoroutine(HealSelf());
+    }
+
+    IEnumerator HealSelf()
+    {
+        yield return new WaitForSeconds(durationToWaitForHealSelf);
+        if(hp < maxHp)
+        {
+            AddHp(hpToHealSelf);
+            AudioSource.PlayClipAtPoint(
+                healingAudio, Camera.main.transform.position, 0.2f);
+            HealSelfCoroutine = StartCoroutine(HealSelf());
+        }
+    }
+
+    public void LoseAbilityToHeal()
+    {
+        if(HealSelfCoroutine != null)
+            StopCoroutine(HealSelfCoroutine);
     }
 
     IEnumerator SetShootingCoroutine()
     {
-        shooting = true;
+        ifRotateToBullet = true;
         yield return new WaitForSeconds(rotateToBulletDuration);
-        shooting = false;
+        ifRotateToBullet = false;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == 14)
+        if (other.gameObject.layer == enemyBulletLayer)
         {
-            DamageDealer damageDealer = other.gameObject.GetComponent<DamageDealer>();
-            //Debug.Log("character" + GetCharacterNumber() + "is shot by " +
-            //    damageDealer.GetCharacterNumber());
-            MinusHp(damageDealer.GetDamage());
-            Destroy(other.gameObject, 0.1f);
+            if (!invulnerable)
+            {
+                DamageDealer damageDealer =
+                    other.gameObject.GetComponent<DamageDealer>();
+                MinusHp(damageDealer.GetDamage());
+                ResetHealSelfCoroutine();
+            }
+            Destroy(other.gameObject);
         }
     }
 }

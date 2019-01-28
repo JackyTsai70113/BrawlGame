@@ -8,10 +8,12 @@ TagManager:
   - Crate
   - Barrel
   - Wall
-  - Human
   - Undefined
   - Bullet
   - PlayerBullet
+  - Team0
+  - Team1
+  - Human
   layers:
   - Default
   - TransparentFX
