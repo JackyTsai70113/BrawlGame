@@ -191,7 +191,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09c14e01414fbbf489b367ff3235dc48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHp: 9999
+  maxHp: 500
   hp: 0
   colorMaterials:
   - {fileID: 2100000, guid: 5a93608b3e08a0f43b28b75f42ad8e06, type: 2}
@@ -205,10 +205,10 @@ MonoBehaviour:
   moveSpeed: 30
   rotationSpeed: 15
   rotateToBulletDuration: 0.4
-  respawning: 0
   healingAudio: {fileID: 8300000, guid: f638f02b218d7473189ed8550cd9089c, type: 3}
-  durationToWaitForHealSelf: 3
-  hpToHealSelf: 0
+  ScreamingAudio: {fileID: 8300000, guid: 0ac8640326207499984fcb08e2e0454e, type: 3}
+  durationToWaitForHealSelf: 2
+  hpToHealSelf: 100
 --- !u!114 &7055823974801856862
 MonoBehaviour:
   m_ObjectHideFlags: 0

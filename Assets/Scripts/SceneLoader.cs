@@ -12,7 +12,6 @@ public class SceneLoader : MonoBehaviour
     {
         currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(currentSceneIndex + 1);
-        Debug.Log("Ready to upload Scene " + currentSceneIndex+1);
     }
 
     public int GetCurrentSceneIndex()

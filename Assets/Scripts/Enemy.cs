@@ -33,7 +33,7 @@ public class Enemy : Character
     public float shootSpeed = 10;
     private Vector3 shootVelocity;
 
-
+    public AudioClip enemyScreamAudio;
     //Components
     private Rigidbody rb;
 
@@ -78,24 +78,25 @@ public class Enemy : Character
 
     private void SetTarget()
     {
-        if (target != null)
-            return;
-
-        foreach (GameObject targetObject in 
+        if (target == null)
+        {
+            foreach (GameObject targetObject in
             GameObject.FindGameObjectsWithTag(targetObjectTag))
-            if (targetObject != gameObject)
-            {
-                target = targetObject;
-                break;
-            }
-        distanceFromTarget =
-            Vector3.Distance(transform.position, target.transform.position);
+                if (targetObject != gameObject)
+                {
+                    target = targetObject;
+                    break;
+                }
+        }
+        else
+            distanceFromTarget =
+                Vector3.Distance(transform.position, target.transform.position);
     }
 
     public void Move()
     {
 
-        if (!moving)
+        if (!moving || !target)
             return;
         if (moveCounter != 50)
         {
@@ -110,24 +111,28 @@ public class Enemy : Character
         Vector3 moveUnitVector = Vector3.Normalize(new Vector3(
             target.transform.position.x - transform.position.x,
             0, target.transform.position.z - transform.position.z));
-        if (BarrierExistFront()) {
-            deltaX = - moveUnitVector.z;
+        if (BarrierExistFront())
+        {
+            deltaX = -moveUnitVector.z;
             deltaZ = moveUnitVector.x;
-            rb.velocity = Vector3.Normalize(new Vector3(deltaX, 0, deltaZ)) * 
+            rb.velocity = Vector3.Normalize(new Vector3(deltaX, 0, deltaZ)) *
                 moveSpeed;
         }
-        else {
-            if ( distanceFromTarget > strollDistance)
+        else
+        {
+            if (distanceFromTarget > strollDistance)
             {
                 deltaX = moveUnitVector.x;
                 deltaZ = moveUnitVector.z;
-                rb.velocity = moveUnitVector * moveSpeed;
+                rb.velocity = Vector3.Normalize(new Vector3(deltaX, 0, deltaZ))
+                    * moveSpeed;
             }
             else
             {
                 deltaX = Random.Range(-1.0f, 1.0f);
                 deltaZ = Random.Range(-1.0f, 1.0f);
-                rb.velocity = Vector3.Normalize(new Vector3(deltaX, 0, deltaZ)) * moveSpeed/2;
+                rb.velocity = Vector3.Normalize(new Vector3(deltaX, 0, deltaZ))
+                    * moveSpeed / 2;
             }
         }
         //rotation
@@ -139,24 +144,24 @@ public class Enemy : Character
                         newRotation,
                         rotationSpeed * Time.deltaTime);
         }
-        else 
+        else if (Mathf.Abs(deltaX) > 0.001 || Mathf.Abs(deltaZ) > 0.001)
         {
-            var newRotation = Quaternion.LookRotation(rb.velocity);
+            var newRotation = Quaternion.Euler(0,
+                Mathf.Atan2(deltaX, deltaZ) * 180 / Mathf.PI, 0);
             transform.rotation = Quaternion.Slerp(
                         transform.rotation,
                         newRotation,
                         rotationSpeed * Time.deltaTime);
         }
     }
-
     public void Shoot()
     { 
-        if (!isShooting)
+        if (!isShooting || !target)
             return;
         if (!AbilityToShootPlayer() || 
             (distanceFromTarget > shootingDistance))
             return;
-        if (shootCounter != 100)
+        if (shootCounter != 80)
         {
             shootCounter += 1;
             return;
@@ -213,11 +218,19 @@ public class Enemy : Character
     {
         if (other.gameObject.layer == playerBulletLayer)
         {
+            AudioSource.PlayClipAtPoint(
+                enemyScreamAudio, Camera.main.transform.position, 0.2f); 
             DamageDealer damageDealer = other.gameObject.GetComponent<DamageDealer>();
-            //Debug.Log("character" + GetCharacterNumber() + "is shot by " +
-            //    damageDealer.GetCharacterNumber());
+            if (grassContacts > 0)
+                StartCoroutine(BeNotTransparentAfterBeingShot());
             MinusHp(damageDealer.GetDamage());
             Destroy(other.gameObject, 0.1f);
         }
+    }
+    IEnumerator BeNotTransparentAfterBeingShot()
+    {
+        BeNotTransparent();
+        yield return new WaitForSeconds(2f);
+        BeTransparent();
     }
 }

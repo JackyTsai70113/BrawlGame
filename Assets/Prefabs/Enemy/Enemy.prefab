@@ -706,7 +706,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3da52ef86e1f7924182a7e6bae769207, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHp: 1
+  maxHp: 1000
   hp: 0
   colorMaterials:
   - {fileID: 2100000, guid: 0539cb79729d97f439f8eef69eeff41a, type: 2}
@@ -728,6 +728,7 @@ MonoBehaviour:
   bulletYPos: 8
   bulletDistance: 5
   shootSpeed: 40
+  enemyScreamAudio: {fileID: 8300000, guid: f90e0d087eba642238fa941955ee921d, type: 3}
 --- !u!1 &4437957173822900431
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,14 +8,10 @@ public class CameraControllerSelf : MonoBehaviour {
     Vector3 PlayerToCameraPos;
     PlayerBody playerBody;
 
-    private bool faceToPlayer;
-    private float zDistance;
-    private float posY = 1126f;
-    private float posZ = -810;
     private float rotX = 53.322f;
     // Use this for initialization
     void Start () {
-        playerBody = FindObjectOfType<PlayerBody>();
+        SetPlayerBody();
         //transform.position = Vector3.zero;
         //StartCoroutine(printSth());
         if (playerBody != null)
@@ -33,6 +29,10 @@ public class CameraControllerSelf : MonoBehaviour {
         //transform.LookAt(player.transform);
         Move();
 	}
+    public void SetPlayerBody()
+    {
+        playerBody = FindObjectOfType<PlayerBody>();
+    }
     void Move()
     {
         if (playerBody != null)
@@ -51,6 +51,5 @@ public class CameraControllerSelf : MonoBehaviour {
             targetPos = new Vector3(0, targetPos.y, targetPos.z);
             transform.position = targetPos;
         }
-
     }
 }

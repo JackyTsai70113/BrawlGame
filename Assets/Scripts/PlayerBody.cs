@@ -12,16 +12,14 @@ public class PlayerBody: Character
     public float rotationSpeed = 15;
     public float rotateToBulletDuration = 1f;
 
-    public bool respawning;
-
     //Shooting Variables
     private bool ifRotateToBullet = false;
     private Vector3 bulletDirection;
     private Rigidbody rb;
 
     public AudioClip healingAudio;
+    public AudioClip ScreamingAudio;
     Coroutine HealSelfCoroutine;
-    private bool abilityToHeal = true;
     public float durationToWaitForHealSelf = 3f;
     public int hpToHealSelf;
 
@@ -140,6 +138,8 @@ public class PlayerBody: Character
         {
             if (!invulnerable)
             {
+                AudioSource.PlayClipAtPoint(
+                    ScreamingAudio, Camera.main.transform.position, 0.2f);
                 DamageDealer damageDealer =
                     other.gameObject.GetComponent<DamageDealer>();
                 MinusHp(damageDealer.GetDamage());

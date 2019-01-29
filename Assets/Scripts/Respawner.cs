@@ -11,10 +11,11 @@ public class Respawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        RespawnCharacter(0);
         /*
         RespawnCharacter(1);
         RespawnCharacter(2);
-        */      
+        */
         RespawnCharacter(3);
         RespawnCharacter(4);
         RespawnCharacter(5);
@@ -38,6 +39,8 @@ public class Respawner : MonoBehaviour
             playerBody.transform.position =
                 new Vector3(0, 0, -160);
             playerBody.SetCharacterNumber(0);
+            FindObjectOfType<Camera>().
+                GetComponent<CameraControllerSelf>().SetPlayerBody();
             return;
         }
 

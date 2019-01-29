@@ -5,38 +5,38 @@ using UnityEngine;
 public class Grass : MonoBehaviour {
 
     [SerializeField] Material[] materials;
-    MeshRenderer[] meshRenders;
+    MeshRenderer meshRender;
 	// Use this for initialization
 	void Start () {
-        meshRenders = GetComponentsInChildren<MeshRenderer>();
+        meshRender = GetComponentInChildren<MeshRenderer>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        
+
 	}
 
-    private void OnTriggerEnter(Collider collider)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collider == null)
+        if (other == null)
             return;
-        else if (collider.tag != "Human")
+        if (other.tag != "Team0" && other.tag != "Team1")
             return;
-        collider.GetComponent<Character>().AddGrassNumber();
-        foreach (MeshRenderer mr in meshRenders)
-            mr.sharedMaterial = materials[1];
+        other.GetComponent<Character>().AddGrassNumber();
+        if(other.tag == "Team0")
+            meshRender.sharedMaterial = materials[1];
 
     }
 
-    private void OnTriggerExit(Collider collider)
+    private void OnTriggerExit(Collider other)
     {
-        if (collider == null)
+        if (other == null)
             return;
-        else if (collider.tag != "Human")
+        if (other.tag != "Team0" && other.tag != "Team1")
             return;
-        collider.GetComponent<Character>().MinusGrassNumber();
-        foreach (MeshRenderer mr in meshRenders)
-            mr.sharedMaterial = materials[0];
+        other.GetComponent<Character>().MinusGrassNumber();
+        if (other.tag == "Team0")
+             meshRender.sharedMaterial = materials[0];
 
     }
 }

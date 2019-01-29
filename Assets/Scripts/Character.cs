@@ -15,7 +15,7 @@ public class Character : MonoBehaviour {
     public Material[] colorMaterials;
 
     private MeshRenderer[] meshRenders;
-    private int grassContacts = 0;
+    public int grassContacts = 0;
     public bool isShooting;
 
     public AudioClip vanishAudio;
@@ -93,7 +93,7 @@ public class Character : MonoBehaviour {
             AudioSource.PlayClipAtPoint(
                 vanishAudio, Camera.main.transform.position, 10f);
             Destroy(totalGameObject);
-            FindObjectOfType<SceneLoader>().LoadLoseScene();
+            FindObjectOfType<GameStatus>().MinusLifeNumber();
         }
         else if (hp <= 0 && gameObject.layer == enemyLayer)
         {
@@ -122,12 +122,20 @@ public class Character : MonoBehaviour {
 
     public void BeTransparent()
     {
+        if(gameObject.tag == "Team1")
+        {
+            info.SetActive(false);
+        }
         foreach (MeshRenderer mr in meshRenders)
             mr.sharedMaterial = colorMaterials[1];
     }
 
     public void BeNotTransparent()
     {
+        if (gameObject.tag == "Team1")
+        {
+            info.SetActive(true);
+        }
         foreach (MeshRenderer mr in meshRenders)
             mr.sharedMaterial = colorMaterials[0];
     }

@@ -5,29 +5,7 @@ using UnityEngine;
 public class GameStatus : MonoBehaviour
 {
     int kills;
-    private bool[] liveCharacter;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void SetLiveCharacter(int characterNumber, bool characterStatus)
-    {
-        liveCharacter[characterNumber] = characterStatus;
-    }
-
-    public bool GetLiveCharacter(int characterNumber)
-    {
-        return liveCharacter[characterNumber];
-    }
+    int lifeNumber = 3;
 
     public void AddKills()
     {
@@ -36,4 +14,12 @@ public class GameStatus : MonoBehaviour
             GetComponent<SceneLoader>().LoadWinScene();
     }
 
+    public void MinusLifeNumber()
+    {
+        lifeNumber--;
+        GetComponentInChildren<InGameCanvasController>().
+            SetLifeNumber(lifeNumber);
+        if (lifeNumber == 0)
+            FindObjectOfType<SceneLoader>().LoadLoseScene();
+    }
 }
