@@ -6,16 +6,27 @@ using UnityEngine.SceneManagement;
 public class SceneLoader : MonoBehaviour
 {
     private int currentSceneIndex;
-    private float timeToWait = 2f;
+    private float timeToWait = 3f;
     private float timeToWaitfForGame = 5f;
 
     void Start()
     {
         currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-        if(currentSceneIndex == 0)
-            StartCoroutine(WaitAndLoad(timeToWait));
-        if (currentSceneIndex == 2)
-            StartCoroutine(WaitAndLoad(timeToWaitfForGame));
+        switch (currentSceneIndex)
+        {
+            case 0:
+                StartCoroutine(WaitAndLoad(timeToWait));
+                break;
+            case 2:
+                StartCoroutine(WaitAndLoad(timeToWaitfForGame));
+                break;
+            case 4:
+                StartCoroutine(WaitAndLoadLobbyScene(timeToWait));
+                break;
+            case 5:
+                StartCoroutine(WaitAndLoadLobbyScene(timeToWait));
+                break;
+        }
     }
 
     public void LoadNextScene()
@@ -46,5 +57,11 @@ public class SceneLoader : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         LoadNextScene();
+    }
+
+    IEnumerator WaitAndLoadLobbyScene(float time)
+    {
+        yield return new WaitForSeconds(time);
+        SceneManager.LoadScene(1);
     }
 }

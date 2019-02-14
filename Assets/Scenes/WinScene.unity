@@ -642,8 +642,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1279317018}
   - component: {fileID: 1279317017}
-  - component: {fileID: 1279317016}
-  - component: {fileID: 1279317019}
   m_Layer: 0
   m_Name: WinAudio
   m_TagString: Untagged
@@ -651,19 +649,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1279317016
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1279317015}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad6a46d27c8b24410b3e1946491c9639, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  winAudio: {fileID: 8300000, guid: b6cedf12a2c024aa98dc2e24bb4536ad, type: 3}
 --- !u!82 &1279317017
 AudioSource:
   m_ObjectHideFlags: 0
@@ -674,7 +659,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: b6cedf12a2c024aa98dc2e24bb4536ad, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -774,18 +759,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1279317019
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1279317015}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46da3a35932be4c4e9d81b6d71fbeb71, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1300841281
 GameObject:
   m_ObjectHideFlags: 0
