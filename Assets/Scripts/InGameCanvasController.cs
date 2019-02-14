@@ -10,10 +10,11 @@ public class InGameCanvasController : MonoBehaviour
     public GameObject thirdLife;
     public GameObject PlayerRespawnMessage;
     public TextMeshProUGUI PlayerRespawnDuration;
+    public TextMeshProUGUI killsText;
 
     private int counter = 3;
 
-    private void Start()
+    void Start()
     {
         PlayerRespawnMessage.SetActive(false);
     }
@@ -33,8 +34,6 @@ public class InGameCanvasController : MonoBehaviour
                 firstLife.SetActive(false);
                 SetRespawningTime();
                 break;
-            default:
-                break;
         }
     }
 
@@ -42,6 +41,11 @@ public class InGameCanvasController : MonoBehaviour
     {
         PlayerRespawnMessage.SetActive(true);
         StartCoroutine(CountToRespawn());
+    }
+
+    public void SetKills(int kills, int targetKills)
+    {
+        killsText.text = "Kills: " + kills + "/" + targetKills;
     }
 
     IEnumerator CountToRespawn()
@@ -53,7 +57,7 @@ public class InGameCanvasController : MonoBehaviour
             StartCoroutine(CountToRespawn());
         else
         {
-            FindObjectOfType<Respawner>().RespawnCharacter(0);
+            FindObjectOfType<Level>().RespawnCharacter(0);
             PlayerRespawnMessage.SetActive(false);
             counter = 3;
         }

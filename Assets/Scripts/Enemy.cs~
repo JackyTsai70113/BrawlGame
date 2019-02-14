@@ -24,7 +24,7 @@ public class Enemy : Character
     private LayerMask playerBulletLayer;
 
     [Header("Bullet Setting")]
-    [SerializeField] GameObject bulletPrefab;
+    public GameObject bulletPrefab;
     public float bulletYPos = 8f;
     public float bulletDistance;
 
@@ -33,7 +33,9 @@ public class Enemy : Character
     public float shootSpeed = 10;
     private Vector3 shootVelocity;
 
+    [Header("SFX")]
     public AudioClip enemyScreamAudio;
+
     //Components
     private Rigidbody rb;
 
@@ -46,7 +48,6 @@ public class Enemy : Character
         //Simplify Component
         rb = GetComponent<Rigidbody>();
 
-        InitialHpAndComponents();
         if (gameObject.tag == "Team0")
             targetObjectTag = "Team1";
         else if (gameObject.tag == "Team1")
@@ -80,21 +81,20 @@ public class Enemy : Character
         if (target == null)
         {
             foreach (GameObject targetObject in
-            GameObject.FindGameObjectsWithTag(targetObjectTag))
+                GameObject.FindGameObjectsWithTag(targetObjectTag))
                 if (targetObject != gameObject)
                 {
                     target = targetObject;
                     break;
                 }
         }
-        if (target != null)
+        else
             distanceFromTarget =
                 Vector3.Distance(transform.position, target.transform.position);
     }
 
     public void Move()
     {
-
         if (!moving || !target)
             return;
         if (moveCounter != 50)
@@ -134,6 +134,7 @@ public class Enemy : Character
                     * moveSpeed / 2;
             }
         }
+
         //rotation
         if (shooting)
         {
@@ -153,9 +154,10 @@ public class Enemy : Character
                         rotationSpeed * Time.deltaTime);
         }
     }
+
     public void Shoot()
     { 
-        if (!isShooting || !target)
+        if (!target)
             return;
         if (!AbilityToShootPlayer() || 
             (distanceFromTarget > shootingDistance))
@@ -181,14 +183,13 @@ public class Enemy : Character
         Destroy(bullet, 7f);
         if (shooting == false)
             StartCoroutine(SetShootingCoroutine());
-        
     }
 
     IEnumerator SetShootingCoroutine()
     {
         shooting = true;
         yield return new WaitForSeconds(rotateToBulletDuration);
-        //shooting = false;
+        shooting = false;
     }
 
     private bool BarrierExistFront()
@@ -226,6 +227,7 @@ public class Enemy : Character
             Destroy(other.gameObject, 0.1f);
         }
     }
+
     IEnumerator BeNotTransparentAfterBeingShot()
     {
         BeNotTransparent();
@@ -235,13 +237,9 @@ public class Enemy : Character
 
     public void CheckForTransparent()
     {
-        if (GetGrassContacts() > 0)
-        {
-            if (target == null || distanceFromTarget > 20)
-                BeTransparent();
-            else
-                BeNotTransparent();
-        }
+        if (GetGrassContacts() > 0 && 
+            (target == null || distanceFromTarget > 20))
+            BeTransparent();
         else
             BeNotTransparent();
     }
@@ -257,7 +255,4 @@ public class Enemy : Character
         info.SetActive(true);
         BodyBeNotTransparent();
     }
-
-
-
 }

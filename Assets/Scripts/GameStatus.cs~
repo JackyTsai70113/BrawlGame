@@ -5,19 +5,21 @@ using UnityEngine;
 public class GameStatus : MonoBehaviour
 {
     int kills;
+    public int targetKills = 5;
     int lifeNumber = 3;
     bool playerIsAlive;
-    public Grass[] allGrass;
     GameObject playerBody;
+
     private void Start()
     {
-        allGrass = FindObjectsOfType<Grass>();
+        GetComponentInChildren<InGameCanvasController>().SetKills(kills, targetKills);
     }
 
     public void AddKills()
     {
         kills++;
-        if (kills >= 3)
+        GetComponentInChildren<InGameCanvasController>().SetKills(kills, targetKills);
+        if (kills >= targetKills)
             GetComponent<SceneLoader>().LoadWinScene();
     }
 

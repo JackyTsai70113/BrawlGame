@@ -6,13 +6,16 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/OpenScene.unity
+    path: Assets/Scenes/Splash Screen.unity
     guid: bc08f4cf01e0945b19212172041a2927
   - enabled: 1
-    path: Assets/Scenes/Lobby.unity
+    path: Assets/Scenes/Lobby Screen.unity
     guid: d6c74c66a27c848bf99390f72c8d771d
   - enabled: 1
-    path: Assets/Scenes/Game.unity
+    path: Assets/Scenes/BeforeBattleScene.unity
+    guid: 9d92d76fbeb054b2f9ef9829b822699a
+  - enabled: 1
+    path: Assets/Scenes/Game Scene.unity
     guid: fe7797bb4a28ac54aa83a5c29103d06e
   - enabled: 1
     path: Assets/Scenes/WinScene.unity

@@ -196,7 +196,6 @@ MonoBehaviour:
   colorMaterials:
   - {fileID: 2100000, guid: 5a93608b3e08a0f43b28b75f42ad8e06, type: 2}
   - {fileID: 2100000, guid: 47c3188b40c04864bab2e2c9d0c5ec16, type: 2}
-  isShooting: 0
   vanishAudio: {fileID: 8300000, guid: 1cc87879fa977462a90888109e3145bb, type: 3}
   totalGameObject: {fileID: 6951482926528148226}
   info: {fileID: 6952095280929917516}
@@ -206,7 +205,11 @@ MonoBehaviour:
   rotationSpeed: 15
   rotateToBulletDuration: 0.4
   healingAudio: {fileID: 8300000, guid: f638f02b218d7473189ed8550cd9089c, type: 3}
-  ScreamingAudio: {fileID: 8300000, guid: 0ac8640326207499984fcb08e2e0454e, type: 3}
+  damagedAudio: {fileID: 8300000, guid: 0ac8640326207499984fcb08e2e0454e, type: 3}
+  runningParticleVFX: {fileID: 2825549308835192305, guid: 145e119b492a1456f8669323a444b3f7,
+    type: 3}
+  healingVFX: {fileID: 7091288266120594413, guid: 6b78cae8ea2164dd1adcaa5aed0e0232,
+    type: 3}
   durationToWaitForHealSelf: 2
   hpToHealSelf: 100
 --- !u!114 &7055823974801856862
@@ -228,7 +231,7 @@ MonoBehaviour:
   damage: 10
   shootSpeed: 50
   shootDuration: 0.5
-  audioClip: {fileID: 8300000, guid: 1a3326d38ac05434280f702c9acdcfec, type: 3}
+  shootingAudio: {fileID: 8300000, guid: 1a3326d38ac05434280f702c9acdcfec, type: 3}
 --- !u!1 &6951673088197619722
 GameObject:
   m_ObjectHideFlags: 0

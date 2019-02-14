@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Character : MonoBehaviour {
-
-    //[Header("Character Setting")]
+public class Character : MonoBehaviour 
+{
+    // Character Setting
     private int characterNumber;
 
     [Header("Hp Setting")]
@@ -13,14 +13,12 @@ public class Character : MonoBehaviour {
 
     [Header("Tranparent Setting")]
     public Material[] colorMaterials;
-
     private MeshRenderer[] meshRenders;
     private int grassContacts;
-    public bool isShooting;
 
     public AudioClip vanishAudio;
 
-    //GameObjects
+    // GameObjects
     public GameObject totalGameObject;
     public GameObject info;
         
@@ -59,13 +57,15 @@ public class Character : MonoBehaviour {
         {
             case 0: ID = "Player";
                 break;
-            case 1: ID = "Bot" + characterNumber;
+            case 1: ID = "Bot " + characterNumber;
                 break;
-            case 2: ID = "Bot" + characterNumber;
+            case 2: ID = "Bot " + characterNumber;
                 break;
-            case 3: ID = "Enemy" + characterNumber;
+            case 3: ID = "Enemy " + (characterNumber - 2);
                 break;
-            case 4: ID = "Enemy" + characterNumber;
+            case 4: ID = "Enemy " + (characterNumber - 2);
+                break;
+            case 5: ID = "Enemy " + (characterNumber - 2);
                 break;
         }
         info.GetComponent<InfoSetter>().SetID(ID);
@@ -85,27 +85,30 @@ public class Character : MonoBehaviour {
         InfoSetHP();
         LayerMask playerLayer = 8;
         LayerMask enemyLayer = 9;
+        GameStatus gameStatus = FindObjectOfType<GameStatus>();
         if (hp <= 0)
         {
             if (gameObject.layer == playerLayer)
             {
                 AudioSource.PlayClipAtPoint(
-                    vanishAudio, Camera.main.transform.position, 10f);
-                FindObjectOfType<GameStatus>().SetPlayerStatus(false);
+                    vanishAudio, Camera.main.transform.position, 20f);
+                gameStatus.SetPlayerStatus(false);
+                gameStatus.MinusLifeNumber();
                 Destroy(totalGameObject);
-                FindObjectOfType<GameStatus>().MinusLifeNumber();
             }
             else if (gameObject.layer == enemyLayer)
             {
                 //FindObjectOfType<Respawner>().
                 //    RespawnCharacter(characterNumber);
                 AudioSource.PlayClipAtPoint(
-                    vanishAudio, Camera.main.transform.position, 10f);
+                    vanishAudio, Camera.main.transform.position, 20f);
+                gameStatus.AddKills();
+                FindObjectOfType<Level>().RespawnCharacter(characterNumber);
                 Destroy(totalGameObject);
-                FindObjectOfType<GameStatus>().AddKills();
             }
         }
     }
+
     public int GetGrassContacts()
     {
         return grassContacts;
@@ -133,5 +136,4 @@ public class Character : MonoBehaviour {
         foreach (MeshRenderer mr in meshRenders)
             mr.sharedMaterial = colorMaterials[0];
     }
-
 }

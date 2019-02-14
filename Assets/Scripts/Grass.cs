@@ -2,20 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Grass : MonoBehaviour {
-
+public class Grass : MonoBehaviour
+{
     public Material[] materials;
     MeshRenderer meshRender;
     GameObject playerBodyObject;
     GameStatus gameStatus;
-	// Use this for initialization
-	void Start () {
+
+	void Start () 
+    {
         meshRender = GetComponentInChildren<MeshRenderer>();
         gameStatus = FindObjectOfType<GameStatus>();
     }
 	
 	// Update is called once per frame
-	void Update () {
+	void Update () 
+    {
         CheckForTransparent();
     }
 
@@ -29,9 +31,7 @@ public class Grass : MonoBehaviour {
             other.GetComponent<PlayerBody>().CheckForTransparent();
         }
         else if (other.tag == "Team1")
-        {
             other.GetComponent<Enemy>().AddGrassNumber();
-        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -44,9 +44,7 @@ public class Grass : MonoBehaviour {
             other.GetComponent<PlayerBody>().CheckForTransparent();
         }
         else if (other.tag == "Team1")
-        {
             other.GetComponent<Enemy>().MinusGrassNumber();
-        }
     }
 
     public void BeTransparent()

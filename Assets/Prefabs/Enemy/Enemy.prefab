@@ -711,14 +711,13 @@ MonoBehaviour:
   colorMaterials:
   - {fileID: 2100000, guid: 0539cb79729d97f439f8eef69eeff41a, type: 2}
   - {fileID: 2100000, guid: d9b7853f900632f438ec0cfed172ad83, type: 2}
-  isShooting: 1
   vanishAudio: {fileID: 8300000, guid: 1cc87879fa977462a90888109e3145bb, type: 3}
   totalGameObject: {fileID: 4437957173822900431}
   info: {fileID: 4651845348703387688}
   moving: 1
   moveSpeed: 30
   rotationSpeed: 60
-  rotateToBulletDuration: 1
+  rotateToBulletDuration: 0.2
   unitLength: 30
   targetObjectTag: 
   strollDistance: 100
