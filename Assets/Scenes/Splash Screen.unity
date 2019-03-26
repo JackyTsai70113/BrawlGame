@@ -180,7 +180,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_Camera: {fileID: 1145634855324600885}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -888,7 +888,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 59.45
+  m_fontSize: 59.4
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1149,7 +1149,7 @@ PrefabInstance:
     - target: {fileID: 1145634854282228519, guid: 35e6b30dd21f6403a8e066669dda15e3,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -10
+      value: -200
       objectReference: {fileID: 0}
     - target: {fileID: 1145634854282228519, guid: 35e6b30dd21f6403a8e066669dda15e3,
         type: 3}
@@ -1191,8 +1191,39 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1145634854282228518, guid: 35e6b30dd21f6403a8e066669dda15e3,
+        type: 3}
+      propertyPath: m_BackGroundColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1145634854282228518, guid: 35e6b30dd21f6403a8e066669dda15e3,
+        type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1145634854282228518, guid: 35e6b30dd21f6403a8e066669dda15e3,
+        type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1145634854282228518, guid: 35e6b30dd21f6403a8e066669dda15e3,
+        type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1145634854282228518, guid: 35e6b30dd21f6403a8e066669dda15e3,
+        type: 3}
+      propertyPath: far clip plane
+      value: 400
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 35e6b30dd21f6403a8e066669dda15e3, type: 3}
+--- !u!20 &1145634855324600885 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 1145634854282228518, guid: 35e6b30dd21f6403a8e066669dda15e3,
+    type: 3}
+  m_PrefabInstance: {fileID: 1145634855324600884}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8448817685228362632
 PrefabInstance:
   m_ObjectHideFlags: 0
